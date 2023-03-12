@@ -37,38 +37,66 @@ img = cv2.imread(image_path,cv2.IMREAD_UNCHANGED )
 u,v, valid_data= read_kitti_flow(filename_path)
 u = u*valid_data
 v = v*valid_data
-#subsample using step_size
-step_size =10
-u_ssampled = u[::step_size, ::step_size]
-v_ssampled = v[::step_size, ::step_size]
-h, w = u_ssampled.shape
 
-#already subsampled grid
-nx = u_ssampled.shape[1]
-ny = u_ssampled.shape[0]
-X, Y = np.meshgrid(np.linspace(1, u.shape[1],nx),np.linspace(1, u.shape[0],ny))
+def plot_optical_flow_dense(u,v,plot_save_path):
+    # Computes the magnitude and angle of the 2D vectors
+    magnitude, angle = cv2.cartToPolar(u, v)
+      
+    # Sets image hue according to the optical flow 
+    # direction
+    mask[..., 0] = angle * 180 / np.pi / 2
+      
+    # Sets image value according to the optical flow
+    # magnitude (normalized)
+    mask[..., 2] = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX)
+      
+    # Converts HSV to RGB (BGR) color representation
+    rgb = cv2.cvtColor(mask, cv2.COLOR_HSV2BGR)
+      
+    # Opens a new window and displays the output frame
+    cv2.imshow("dense optical flow", rgb)
+      
+    ax.grid(False)
+    # Hide axes ticks
+    #ax.set_xlim(right = u.shape[1])
+    #ax.set_ylim(bottom = u.shape[0])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.savefig(plot_save_path, bbox_inches='tight', pad_inches=0, dpi = 200)
+plot_optical_flow_color(u,v,img,plot_save_path) 
+  
+def plot_optical_flow_color(u,v,img,plot_save_path):
+    #subsample using step_size
+    step_size =10
+    u_ssampled = u[::step_size, ::step_size]
+    v_ssampled = v[::step_size, ::step_size]
+    h, w = u_ssampled.shape
 
-maxOF = max(np.max(u), np.max(v))
-angles = np.arctan2(v_ssampled, u_ssampled)
-lengths = np.sqrt(np.square(u_ssampled) + np.square(v_ssampled))
-max_abs = np.max(lengths)
+    #already subsampled grid
+    nx = u_ssampled.shape[1]
+    ny = u_ssampled.shape[0]
+    X, Y = np.meshgrid(np.linspace(1, u.shape[1],nx),np.linspace(1, u.shape[0],ny))
 
-# color is the magnitude
-c = np.array(list(map(vector_to_rgb, 2 * np.pi * lengths.flatten() / max_abs*0.7, 
-                                      max_abs * np.ones_like(lengths.flatten()))))
+    maxOF = max(np.max(u), np.max(v))
+    angles = np.arctan2(v_ssampled, u_ssampled)
+    lengths = np.sqrt(np.square(u_ssampled) + np.square(v_ssampled))
+    max_abs = np.max(lengths)
 
-fig, ax = plt.subplots(figsize=(40,40))
-ax.axis("off")
-ax.imshow(img, cmap='gray')
-q = ax.quiver(X,Y, u_ssampled, -v_ssampled,scale=maxOF*8,color = c,width=0.001)  #kitti's coordinate origin is flipped for the y coordinate
+    # color is the magnitude
+    c = np.array(list(map(vector_to_rgb, 2 * np.pi * lengths.flatten() / max_abs*0.7, 
+                                        max_abs * np.ones_like(lengths.flatten()))))
 
-# Hide grid lines
-ax.grid(False)
-# Hide axes ticks
-#ax.set_xlim(right = u.shape[1])
-#ax.set_ylim(bottom = u.shape[0])
-ax.set_xticks([])
-ax.set_yticks([])
-plt.savefig(plot_save_path, bbox_inches='tight', pad_inches=0, dpi = 200)
+    fig, ax = plt.subplots(figsize=(40,40))
+    ax.axis("off")
+    ax.imshow(img, cmap='gray')
+    q = ax.quiver(X,Y, u_ssampled, -v_ssampled,scale=maxOF*8,color = c,width=0.001)  #kitti's coordinate origin is flipped for the y coordinate
 
-sys.exit()
+    # Hide grid lines
+    ax.grid(False)
+    # Hide axes ticks
+    #ax.set_xlim(right = u.shape[1])
+    #ax.set_ylim(bottom = u.shape[0])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    plt.savefig(plot_save_path, bbox_inches='tight', pad_inches=0, dpi = 200)
+
