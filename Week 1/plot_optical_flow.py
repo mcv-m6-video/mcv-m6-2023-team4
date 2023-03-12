@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors
 import sys
+from ipynb.fs.full.optical_flow_metrics import read_kitti_flow
 dataset_flow_path = '../datasets/data_stereo_flow/training/flow_noc/'
 
 filename = '000157_10.png'
@@ -17,26 +18,7 @@ image_path = dataset_image_path+image
 filename_path = dataset_flow_path+filename
 
 np.set_printoptions(threshold=sys.maxsize)
-def read_kitti_flow(filename):
-    #reads the optical flow from the KITTI dataset
-    # In R, flow along x-axis normalized by image width and quantized to [0;2^16 – 1]
-    # In G, flow along x-axis normalized by image width and quantized to [0;2^16 – 1]
-    # B = 0 for invalid flow (e.g., sky pixels)
-    
-    img = cv2.imread(filename,cv2.IMREAD_ANYCOLOR | cv2.IMREAD_ANYDEPTH )
 
-    flow = img.astype(np.float32)
-    flow = flow[:,:,1:]
-    #undo quantization
-    flow = flow-2**15
-    flow = flow/64
-    #valid data is in the last channel (first one because opencv-> bgr instead of)
-    valid_data = img[:,:,0]
-    
-    #store u v arrow directions
-    u = (flow[:, :, 1])
-    v = (flow[:, :, 0])
-    return u,v,valid_data  
 
 def vector_to_rgb(angle, absolute):
     #from https://stackoverflow.com/questions/19576495/color-matplotlib-quiver-field-according-to-magnitude-and-direction
