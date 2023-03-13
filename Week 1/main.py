@@ -243,8 +243,8 @@ def calculate_mean_iou(frame):
         used_indexes_noisy.append(max_index)
         
         bbox_normal['iou'] = max_iou
-        bboxes_noisy[max_index]['iou'] = max_iou
         bboxes_noisy[max_index]['detected'] = True
+        bboxes_noisy[max_index]['iou'] = max_iou
         
     
     mean_iou = np.array(iou_bboxes_normal).mean()
@@ -259,47 +259,54 @@ def generate_confidence(frame):
 def order_frame_by_confidence(frame):
     return sorted(frame, key=lambda x: x['confidence'], reverse=True)
 
-def calculate_mean_ap(frame_grountruth, frame_preds):
+def calculate_mean_ap(frame_groundtruth, frame_preds):
     N = 10
     iou_thresh = 0.5
     
+    mean_ap = 0
     
-    # We generate confidence scores and sort    
-    frame_preds = generate_confidence(frame_preds)
-    sorted_frame_preds = order_frame_by_confidence(frame_preds)
-    
-    # Compute the precision and recall values for different decision thresholds
-    thresholds = [bbox['confidence'] for bbox in frame_preds]
-    
-    precisions = []
-    recalls = []
-    
-    detected = True
-    for threshold in thresholds:
-        tp = 0
-        fp = 0
+    for i in range(N):
+        # We generate confidence scores and sort    
+        frame_preds = generate_confidence(frame_preds)
+        sorted_frame_preds = order_frame_by_confidence(frame_preds)
+        
+        # Compute the precision and recall values for different decision thresholds
+        thresholds = [bbox['confidence'] for bbox in frame_preds]
+        
+        precisions = []
+        recalls = []
+        
+        detected = 0
+        for threshold in thresholds:
+            tp = 0
+            fp = 0
 
-        for bbox in sorted_frame_preds:
-            if bbox['detected'] == False:
-                detected = False
-            if bbox['confidence'] > threshold:
-                iou = bbox['iou']
-                if iou > iou_thresh:
-                    tp += 1
-                else:
-                    fp += 1
-        # If GT object does not have any prediction we consider that we try to find the object with an infinite amount of bounding boxes           
-        # precision = (tp / [tp + fp]) = (1 / inf)
-        # recall = (tp / [tp + fn]) = (1 / 1)
-        precisions.append(tp/(tp+fp))
-        recalls.append(tp/len(frame_grountruth))
+            for bbox in sorted_frame_preds:
+                if bbox['detected'] == True:
+                    detected += 1
+                if bbox['confidence'] > threshold:
+                    iou = bbox['iou']
+                    if iou > iou_thresh:
+                        tp += 1
+                    else:
+                        fp += 1
      
-    if detected == False:
-        precisions.append(0)
-        recalls.append(1)
+            precisions.append(tp/(tp+fp))
+            recalls.append(tp/len(frame_groundtruth))
         
         
+        # If GT object does not have any prediction we consider that we try to find the object with an infinite amount of bounding boxes           
+         # precision = (tp / [tp + fp]) = (1 / inf) = 0 -> lots of false positive because of the infinite amount of bounding boxes
+         # recall = (tp / [tp + fn]) = (1 / 1) = 1 -> fn = 0 because of no object not detected
+
+         #Therefore, if we have not detected all the bounding boxes in the ground truth we append
+        if detected < len(frame_groundtruth):
+            precisions.append(0)
+            recalls.append(1)
             
+        mean_ap += map_pascal_VOC(precisions, recalls)
+
+    return mean_ap     
         
 
         
@@ -314,6 +321,23 @@ def calculate_mean_ap(frame_grountruth, frame_preds):
     #     ap = np.mean(precision) if precision.size else float("nan")
     #     results_per_category.append(("{}".format(name), float(ap * 100)))
     
+def map_pascal_VOC(precisions, recalls):
+    index_recalls = len(recalls) - 2
+    index_precisions = len(recalls) - 1
+    average_precision = 0 
+    for i in range(1, -0.1, -0.1):
+        if i < recalls[index_recalls]:
+            if index_recalls != 0:
+                index_recalls -= 1
+                index_precisions -= 1
+            elif index_recalls == 0 and index_precisions != 0:
+                index_precisions -= 1
+
+        average_precision += precisions[index_precisions]
+
+    return average_precision / 11
+
+
 
 def generate_noisy_annotations(frames, th_dropout, th_generate, mean, std):
     frames_all = copy.deepcopy(frames)
