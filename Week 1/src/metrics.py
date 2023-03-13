@@ -27,6 +27,7 @@ def bbox_iou(bboxA, bboxB):
     # return the intersection over union value
     return iou
 
+
 def calculate_mean_iou(frame):
     bboxes_pred = []
     bboxes_gt = []
@@ -59,11 +60,16 @@ def calculate_mean_iou(frame):
                     max_index = index
         
         # Each GT box can only be assigned to one predicted box
-        iou_bboxes_gt.append(max_iou)
-        used_indexes_pred.append(max_index)
+        if max_index != -1:
+            iou_bboxes_gt.append(max_iou)
+            used_indexes_pred.append(max_index)
+            bboxes_pred[max_index]['detected'] = True
+            bboxes_pred[max_index]['iou'] = max_iou
+            
+    for bbox in bboxes_pred:
+        print('Bbox iou:', bbox['iou'])
         
-        bboxes_pred[max_index]['detected'] = True
-        bboxes_pred[max_index]['iou'] = max_iou
+    print(len(iou_bboxes_gt))
         
     mean_iou = np.array(iou_bboxes_gt).mean()
 
@@ -78,15 +84,20 @@ def generate_confidence(frame):
 def order_frame_by_confidence(frame):
     return sorted(frame, key=lambda x: x['confidence'], reverse=True)
 
-def calculate_mean_ap(frame_groundtruth, frame_preds):
-    N = 10
+def calculate_ap(frame_groundtruth, frame_preds, without_confidences=False):
+    if without_confidences:
+        N = 10
+    else:
+        N = 1
+        
     iou_thresh = 0.5
     
-    mean_ap = 0
+    ap = 0
     
-    for i in range(N):
-        # Generate confidence scores and sort    
-        frame_preds = generate_confidence(frame_preds)
+    for _ in range(N):
+        # Generate confidence scores and sort
+        if without_confidences:
+            frame_preds = generate_confidence(frame_preds)
         sorted_frame_preds = order_frame_by_confidence(frame_preds)
         
         # Extract the confidence values in a thresholds list
@@ -96,7 +107,7 @@ def calculate_mean_ap(frame_groundtruth, frame_preds):
         recalls = []
         
         detected_bboxes = 0
-        #Iterate for each threshold to find the precision and the recall
+        # Iterate for each threshold to find the precision and the recall
         for threshold in thresholds:
             true_positives = 0
             false_positives = 0
@@ -116,7 +127,7 @@ def calculate_mean_ap(frame_groundtruth, frame_preds):
                 precisions.append(true_positives / (true_positives + false_positives))
             else:
                 precisions.append(0)
-                
+            
             recalls.append(true_positives / len(frame_groundtruth))
         
         
@@ -125,12 +136,12 @@ def calculate_mean_ap(frame_groundtruth, frame_preds):
             precisions.append(0)
             recalls.append(1)
             
-        mean_ap += map_pascal_VOC(precisions, recalls)
+        ap += ap_pascal_VOC(recalls, precisions)
 
-    return mean_ap / N
+    return ap / N
         
     
-def map_pascal_VOC(precisions, recalls):
+def ap_pascal_VOC(recalls, precisions):
     index_recalls = len(recalls) - 2
     index_precisions = len(recalls) - 1
     average_precision = 0 
@@ -145,3 +156,7 @@ def map_pascal_VOC(precisions, recalls):
         average_precision += precisions[index_precisions]
 
     return average_precision / 11
+
+
+
+
