@@ -26,7 +26,9 @@ np.set_printoptions(threshold=sys.maxsize)
 
 
 def plot_optical_flow_dense(u,v,img,plot_save_path):
-    #subsample using step_size
+    #The angle (direction) of flow by hue is visualized and the distance (magnitude) of flow by the value of HSV color representation.
+    #The strength of HSV is always set to a maximum of 255 for optimal visibility.
+    # Referenced from opencv docs
     mask = np.zeros_like((img))
     print(img.shape)
     print("MASK ", mask.shape)
