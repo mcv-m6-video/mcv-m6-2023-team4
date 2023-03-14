@@ -2,12 +2,11 @@ from src.parser import *
 from src.noisy import *
 
 def main():
-    root_folder = 'c:/Users/Marcos/Desktop/Master Computer Vision/M6/Project/Work/mcv-m6-2023-team4/datasets/'
+    root_folder = '../datasets/'
     # root_folder = '../datasets/'
-    frames = parse_xml(root_folder + '/ai_challenge_s03_c010-full_annotation.xml')
+    frames = parse_xml(root_folder + 'ai_challenge_s03_c010-full_annotation.xml')
     
-    
-    frames_noisy = parse_detection_txt('C:/Users/Marcos/Desktop/Master Computer Vision/M6/Project/Work/mcv-m6-2023-team4/datasets/AICity_data/train/S03/c010/det/det_yolo3.txt')
+    frames_noisy = parse_detection_txt('../datasets/AICity_data/train/S03/c010/det/det_mask_rcnn.txt')
     frames_all = copy.deepcopy(frames)
     for index, frame in frames_noisy.items():
         for bbox in frame:

@@ -60,11 +60,12 @@ def calculate_mean_iou(frame):
                     max_index = index
         
         # Each GT box can only be assigned to one predicted box
+        iou_bboxes_gt.append(max_iou)
+        bboxes_pred[max_index]['iou'] = max_iou
         if max_index != -1:
-            iou_bboxes_gt.append(max_iou)
             used_indexes_pred.append(max_index)
             bboxes_pred[max_index]['detected'] = True
-            bboxes_pred[max_index]['iou'] = max_iou
+            
             
     for bbox in bboxes_pred:
         print('Bbox iou:', bbox['iou'])

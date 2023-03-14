@@ -103,7 +103,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
 
     mean_ap = 0
     video_iou = []
-    
+    iou = 0
     index = 0
     # loop through the frames
     while True:
@@ -121,7 +121,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
         ap = calculate_ap(frames[index], bboxes_noisy, without_confidence)
         mean_ap += ap
         video_iou.append(mean_iou)
-        
+        iou += mean_iou
         for bounding_box in frames[index]:
             draw_rectangle_on_frame(frame, bounding_box)
         
@@ -140,8 +140,9 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
         index += 1
 
     mean_ap = mean_ap /index
+    mean_iou_final = iou / index
     print('Mean ap:', mean_ap)
-    
+    print('Mean iou:', mean_iou_final)
     
     # release the video file and close the window
     cap.release()
