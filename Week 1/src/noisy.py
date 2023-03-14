@@ -5,12 +5,18 @@ from src.utils import *
 
 # TODO: FIX GENERATED BOUNDING BOXES, THEY ARE GENERATED ON THE LEFT CORNER ONLY? WHY
 def generate_random_bbox(img_width, img_height, min_size, max_width, max_height):
-    dp = np.random.randint(0,300)
-    xtl = max(10, 384*np.random.random())
-    ytl = max(10, 384*np.random.random())
-    xbr =  np.random.randint(0, min(xtl+dp, 1920-xtl))
-    ybr =  np.random.randint(0, min(ytl+dp,1920-ytl))
-        
+    
+    dp = np.random.randint(50,250)
+    xtl = max(10, 1900*np.random.random() - dp)
+    ytl = max(10, 1000*np.random.random() - dp)
+    xbr =  xtl + dp
+    ybr =  ytl + dp
+    
+    
+    #Move the bbox generated randomly
+    #dx = np.random.randint(0, 750)
+    #dy = np.random.randint(0, 750)
+
     generated_bbox = {
                         'track_id': None,
                         'xtl': xtl,
@@ -23,7 +29,7 @@ def generate_random_bbox(img_width, img_height, min_size, max_width, max_height)
                         'parked': None,
                         'predicted': True
                     }
-    
+    #print(generated_bbox)
     return generated_bbox
 
 def move_random_bbox(bounding_box, mean, std):

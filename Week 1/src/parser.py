@@ -101,6 +101,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
     if show_video == True:
         cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
 
+        
     mean_ap = 0
     video_iou = []
     iou = 0

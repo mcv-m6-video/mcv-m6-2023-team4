@@ -6,7 +6,6 @@ def put_text(frame, text, pos=(0, 0), font=cv2.FONT_HERSHEY_PLAIN, font_scale=2,
     x, y = pos
     text_size, _ = cv2.getTextSize(text, font, font_scale, font_thickness)
     text_w, text_h = text_size
-    
     sub_img = frame[y:y+text_h, x:x+text_w]
     white_rect = np.ones(sub_img.shape, dtype=np.uint8) * 255
     res = cv2.addWeighted(sub_img, 0.5, white_rect, 0.5, 1.0)
@@ -25,5 +24,11 @@ def draw_rectangle_on_frame(frame, bounding_box):
     else:
         cv2.rectangle(frame, (xtl, ytl), (xbr, ybr), (0, 255, 0), 2)
 
+def merge_frames(frames, frames_noisy):
+    frames_all = copy.deepcopy(frames)
+    for index, frame in frames_noisy.items():
+        for bbox in frame:
+            frames_all[index].append(bbox)
 
+    return frames_all
 
