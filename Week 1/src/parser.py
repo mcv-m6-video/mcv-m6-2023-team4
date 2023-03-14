@@ -110,6 +110,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
         # read a frame from the video
         ret, frame = cap.read()
         
+        print()
 
         # check if the frame was successfully read
         if not ret:
@@ -124,7 +125,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
         for bounding_box in frames[index]:
             draw_rectangle_on_frame(frame, bounding_box)
         
-        print('Mean iou:', mean_iou)
+        # print('Mean iou:', mean_iou)
         
         # display the frame
         if show_video == True:
@@ -146,7 +147,10 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
     cap.release()
     cv2.destroyAllWindows()
     
-    plt.plot(list(range(index)), video_iou)
+    # plt.plot(list(range(index)), video_iou)
+    start_plot = 500
+    end_plot = 700
+    plt.plot(list(range(start_plot, end_plot)), video_iou[start_plot:end_plot])
     plt.ylim(0,1)
     plt.show()
 
