@@ -6,7 +6,17 @@ from src.metrics import *
 import csv
 import sys
 import matplotlib.pyplot as plt
+import threading
+import time
+import matplotlib.animation as animation
+from functools import partial
+import os
+import subprocess
+import glob
+from moviepy.editor import VideoFileClip
 
+# root_folder = 'C:/Users/Marcos/Desktop/Master Computer Vision/M6/Project/Work/mcv-m6-2023-team4/Week 1/'
+root_folder = '../'
 
 #TODO
 def parse_detection_txt(file_path):
@@ -93,25 +103,29 @@ def parse_xml(file_path):
 
     return frames
 
-
-def parse_video(file_path, frames, show_video=False, without_confidence=False):
+    
+def parse_video(file_path, frames, show_video=False, without_confidence=False,generate_plot_video=False):
     # load the video file
     cap = cv2.VideoCapture(file_path)
+    
     
     if show_video == True:
         cv2.namedWindow('frame', cv2.WINDOW_NORMAL)
 
-        
+    
+    start_plot = 0
+    end_plot = 250
+    # end_plot = np.Inf
+    
     mean_ap = 0
     video_iou = []
     iou = 0
     index = 0
-    # loop through the frames
+    # loop through the frames    
     while True:
         # read a frame from the video
         ret, frame = cap.read()
         
-        print()
 
         # check if the frame was successfully read
         if not ret:
@@ -123,16 +137,25 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
         mean_ap += ap
         video_iou.append(mean_iou)
         iou += mean_iou
+        
         for bounding_box in frames[index]:
-            draw_rectangle_on_frame(frame, bounding_box)
+                draw_rectangle_on_frame(frame, bounding_box)
         
-        # print('Mean iou:', mean_iou)
-        
-        # display the frame
+        if generate_plot_video == True and index < end_plot:
+            plt.imshow(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            plt.axis('off')
+            plt.tight_layout()
+            plt.show(block=False)
+            plt.savefig(root_folder + "outputs/file%02d.png" % index)
+            plt.clf()  
+          
         if show_video == True:
+             
             cv2.imshow('frame', frame)
+            
             # wait for a key press     
-            key = cv2.waitKey(250000000)
+            key = cv2.waitKey(1)
+            
 
             # check if the user pressed the 'q' key to quit
             if key == ord('q'):
@@ -149,10 +172,49 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False):
     cap.release()
     cv2.destroyAllWindows()
     
-    # plt.plot(list(range(index)), video_iou)
-    start_plot = 500
-    end_plot = 700
-    plt.plot(list(range(start_plot, end_plot)), video_iou[start_plot:end_plot])
-    plt.ylim(0,1)
-    plt.show()
-
+    end_plot = min(end_plot, index)
+    
+    if generate_plot_video == True:
+        os.chdir(root_folder + 'outputs/')
+        subprocess.call([
+            'ffmpeg', '-y', '-framerate', '8', '-i', 'file%02d.png', '-r', '30', '-pix_fmt', 'yuv420p',
+            'traffic_video.mp4'
+        ])
+        for file_name in glob.glob(root_folder + 'outputs/*.png'):
+            os.remove(file_name)
+        
+        for i in range(end_plot):
+            plt.plot(list(range(start_plot, i)), video_iou[start_plot:i])
+            plt.title('YOLO v3')
+            plt.ylim(0,1)
+            plt.xlim(0,end_plot)
+            plt.ylabel('Mean IoU')
+            plt.xlabel('Frames')
+            plt.tight_layout()
+            plt.show(block=False)
+            plt.savefig(root_folder + "outputs/file%02d.png" % i)
+            plt.clf()
+        os.chdir(root_folder + 'outputs/')
+        subprocess.call([
+            'ffmpeg', '-y', '-framerate', '8', '-i', 'file%02d.png', '-r', '30', '-pix_fmt', 'yuv420p',
+            'plot_video.mp4'
+        ])
+        for file_name in glob.glob(root_folder + 'outputs/*.png'):
+            os.remove(file_name)
+        
+        videoClip = VideoFileClip(root_folder + "outputs/traffic_video.mp4")
+        videoClip.write_gif(root_folder + "outputs/traffic_video.gif", fps=5)
+        
+        videoClip = VideoFileClip(root_folder + "outputs/plot_video.mp4")
+        videoClip.write_gif(root_folder + "outputs/plot_video.gif", fps=5)
+    else:
+        start_plot = 0
+        plt.plot(list(range(start_plot, end_plot)), video_iou[start_plot:end_plot])
+        plt.title('YOLO v3')
+        plt.ylim(0,1)
+        plt.xlim(0,end_plot)
+        plt.ylabel('Mean IoU')
+        plt.xlabel('Frames')
+        plt.show()
+    
+    
