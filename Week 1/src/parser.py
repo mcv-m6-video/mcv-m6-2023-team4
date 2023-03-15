@@ -15,10 +15,9 @@ import subprocess
 import glob
 from moviepy.editor import VideoFileClip
 
-# root_folder = 'C:/Users/Marcos/Desktop/Master Computer Vision/M6/Project/Work/mcv-m6-2023-team4/Week 1/'
+# root_folder = 'C:/Users/Marcos/Desktop/Master Computer Vision/M6/Project/Work/test/mcv-m6-2023-team4/Week 1/'
 root_folder = '../'
 
-#TODO
 def parse_detection_txt(file_path):
     # Format [frame, -1, left, top, width, height, conf, -1, -1, -1].
     frames = {}
@@ -114,7 +113,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False,ge
 
     
     start_plot = 0
-    end_plot = 250
+    end_plot = 100
     # end_plot = np.Inf
     
     mean_ap = 0
@@ -163,9 +162,9 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False,ge
     
         index += 1
 
+    
     mean_ap = mean_ap /index
     mean_iou_final = iou / index
-    print('Mean ap:', mean_ap)
     print('Mean iou:', mean_iou_final)
     
     # release the video file and close the window
@@ -185,7 +184,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False,ge
         
         for i in range(end_plot):
             plt.plot(list(range(start_plot, i)), video_iou[start_plot:i])
-            plt.title('YOLO v3')
+            plt.title('Noisy')
             plt.ylim(0,1)
             plt.xlim(0,end_plot)
             plt.ylabel('Mean IoU')
@@ -210,7 +209,7 @@ def parse_video(file_path, frames, show_video=False, without_confidence=False,ge
     else:
         start_plot = 0
         plt.plot(list(range(start_plot, end_plot)), video_iou[start_plot:end_plot])
-        plt.title('YOLO v3')
+        plt.title('SSD512')
         plt.ylim(0,1)
         plt.xlim(0,end_plot)
         plt.ylabel('Mean IoU')

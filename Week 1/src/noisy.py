@@ -3,7 +3,6 @@ import copy
 from src.parser import *
 from src.utils import *
 
-# TODO: FIX GENERATED BOUNDING BOXES, THEY ARE GENERATED ON THE LEFT CORNER ONLY? WHY
 def generate_random_bbox(img_width, img_height, min_size, max_width, max_height):
     
     dp = np.random.randint(50,250)
@@ -13,9 +12,6 @@ def generate_random_bbox(img_width, img_height, min_size, max_width, max_height)
     ybr =  ytl + dp
     
     
-    #Move the bbox generated randomly
-    #dx = np.random.randint(0, 750)
-    #dy = np.random.randint(0, 750)
 
     generated_bbox = {
                         'track_id': None,
@@ -27,9 +23,10 @@ def generate_random_bbox(img_width, img_height, min_size, max_width, max_height)
                         'occluded': None,
                         'keyframe': None,
                         'parked': None,
-                        'predicted': True
+                        'predicted': True,
+                        'confidence': float(0)
                     }
-    #print(generated_bbox)
+    
     return generated_bbox
 
 def move_random_bbox(bounding_box, mean, std):
@@ -45,6 +42,7 @@ def move_random_bbox(bounding_box, mean, std):
             'keyframe': None,
             'parked': None,
             'predicted': True,
+            'confidence': float(0)
         }
     return bbox_moved
 
