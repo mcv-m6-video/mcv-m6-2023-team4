@@ -27,7 +27,8 @@ def generate_random_bbox(img_width, img_height, min_size, max_width, max_height)
                         'occluded': None,
                         'keyframe': None,
                         'parked': None,
-                        'predicted': True
+                        'predicted': True,
+                        'confidence': float(0)
                     }
     #print(generated_bbox)
     return generated_bbox
@@ -45,6 +46,7 @@ def move_random_bbox(bounding_box, mean, std):
             'keyframe': None,
             'parked': None,
             'predicted': True,
+            'confidence': float(0)
         }
     return bbox_moved
 
