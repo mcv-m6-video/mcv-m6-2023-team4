@@ -1,1 +1,7 @@
-# mcv-m6-2023-team4
+# Team 4
+
+## Members
+* Julia Ariadna Blanco Arnaus
+* Marcos Muñoz González
+* Abel García Romera
+* Hicham El Muhandiz Aarab
