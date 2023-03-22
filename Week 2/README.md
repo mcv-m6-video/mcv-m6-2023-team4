@@ -24,6 +24,10 @@ Perform background estimation
 - Compare the adaptive and non-adaptive versions qualitatively and quantitatively
 ### Task 3: Compare with SOTA and evaluate one SOTA method
 - Choose one SOTA method, implement it or find an existing implementation (chosen methods):
+    - BackgroundSubtractorMOG2
+    - BackgroundSubtractorKNN
+    - BackgroundSubtractorCNT
+    - BackgroundSubtractorGSOC
 
 ### Task 4: Update simple Gaussian model to support color sequences
 - Use multiple gaussians in different color spaces
