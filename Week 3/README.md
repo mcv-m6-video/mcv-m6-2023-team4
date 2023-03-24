@@ -19,3 +19,5 @@ sbatch --gres gpu:1 -n 10 job_task1.1_maskrcnn_0.5
 
 sbatch --gres gpu:1 -n 10 job_task1.1_maskrcnn_0.7
 ```
+
+Each result will be in the folder **Results/Task_1.1/*NETWORK_NAME*/*CONFIDENCE_SCORE*/**, for example for the first *sbatch* the result will be in the folder: **Results/Task_1.1/faster_RCNN/0.5/**.
