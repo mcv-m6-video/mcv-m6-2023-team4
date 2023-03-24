@@ -20,4 +20,4 @@ python task_1.1.py --network mask_RCNN --th 0.5
 python task_1.1.py --network mask_RCNN --th 0.7
 ```
 
-Each result will be in the folder **Results/Task_1.1/*NETWORK_NAME*/*CONFIDENCE_SCORE*/**, for example for the first *sbatch* the result will be in the folder: **Results/Task_1.1/faster_RCNN/0.5/**.
+Each result will be in the folder **Results/Task_1.1/*NETWORK_NAME*/*CONFIDENCE_SCORE*/**, for example for the first command the result will be in the folder: **Results/Task_1.1/faster_RCNN/0.5/**.
