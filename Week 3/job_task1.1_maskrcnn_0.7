@@ -1,0 +1,10 @@
+#!/bin/bash
+#SBATCH -n 4
+#SBATCH --mem 1000
+#SBATCH -p mhigh,mhigh
+#SBATCH --gres gpu:1
+#SBATCH -o %x_%u_%j.out
+#SBATCH -e %x_%u_%j.err
+
+conda activate m6
+python task_1.1.py --network mask_RCNN --th 0.7
