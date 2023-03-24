@@ -26,7 +26,10 @@ Alternatively, you can run the 4 jobs in this folder, using *sbatch*. They corre
 
 ```cmd
 sbatch --gres gpu:1 -n 10 job_task1.1_fasterrcnn_0.5
+
 sbatch --gres gpu:1 -n 10 job_task1.1_fasterrcnn_0.7
+
 sbatch --gres gpu:1 -n 10 job_task1.1_maskrcnn_0.5
+
 sbatch --gres gpu:1 -n 10 job_task1.1_maskrcnn_0.7
 ```
