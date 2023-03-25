@@ -33,3 +33,11 @@ sbatch --gres gpu:1 -n 10 job_task1.1_maskrcnn_0.5
 
 sbatch --gres gpu:1 -n 10 job_task1.1_maskrcnn_0.7
 ```
+
+## Task 1.3
+
+Run the file that fine-tunes and then evaluates the network you specify using the parameter *--network*. You can also specify the initial learning rate using the parameter *--lr*. The default one is 1e-3:
+
+```cmd
+python task_1.3.py --network faster_RCNN --lr 1e-3
+```
