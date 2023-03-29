@@ -53,3 +53,33 @@ Run the file that fine-tunes and then evaluates the network you specify using th
 ```cmd
 python task_1.4.py --network faster_RCNN --lr 1e-3 --cross-validation=Normal
 ```
+
+## Task 2.2
+
+See the task_2_2.ipynb notebook for generating gif visualisations. The outputted predictions are in /outputs and data_kalman (TrackEval format). Additionally, a .py has been provided. Input file of the detections must be provided (MOT challenge format).See --help for options.
+```cmd
+python task_2.2.py --help
+```
+
+```cmd
+python task_2.2.py --input_file input.txt 
+```
+
+## Task 2.3
+
+SORT results can be evaluated by replacing the contents of folder data with the contents of the provided /outputs/data_kalman and running the following in TrackEval/scripts:
+```cmd
+python run_mot_challenge.py  --BENCHMARK Faster-RCNN --DO_PREPROC False
+```
+
+```cmd
+python run_mot_challenge.py  --BENCHMARK MASK-RCNN --DO_PREPROC False
+```
+
+```cmd
+python run_mot_challenge.py  --BENCHMARK RetinaNet --DO_PREPROC False
+```
+
+```cmd
+python run_mot_challenge.py  --BENCHMARK Faster-RCNN-finetuned --DO_PREPROC False
+```
