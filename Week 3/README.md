@@ -36,7 +36,7 @@ sbatch --gres gpu:1 -n 10 job_task1.1_maskrcnn_0.7
 
 ## Task 1.2
 
-See the annotations.ipynb notebook
+See the annotations.ipynb notebook. The final annotations are on the file Anotation_AICITY_S05_C010.xml
 
 ## Task 1.3
 
