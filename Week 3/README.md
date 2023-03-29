@@ -54,6 +54,9 @@ Run the file that fine-tunes and then evaluates the network you specify using th
 python task_1.4.py --network faster_RCNN --lr 1e-3 --cross-validation=Normal
 ```
 
+## Task 2.1
+See the task_2_1.ipynb notebook to generate the video.  The outputted predictions are in /outputs and data_simple (TrackEval format). 
+
 ## Task 2.2
 
 See the task_2_2.ipynb notebook for generating gif visualisations. The outputted predictions are in /outputs and data_kalman (TrackEval format). Additionally, a .py has been provided. Input file of the detections must be provided (MOT challenge format).See --help for options.
