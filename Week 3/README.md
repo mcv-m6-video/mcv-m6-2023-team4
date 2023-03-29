@@ -48,7 +48,7 @@ python task_1.3.py --network faster_RCNN --lr 1e-3
 
 ## Task 1.4
 
-Run the file that fine-tunes and then evaluates the network you specify using the parameter *--network* using cross-validation. You can also specify the initial learning rate using the parameter *--lr*. The default one is 1e-3. For cross-validation you have to use parameter *--cross-validation--*, there are several options such as None, Normal and Random
+Run the file that fine-tunes and then evaluates the network you specify using the parameter *--network* using cross-validation. You can also specify the initial learning rate using the parameter *--lr*. The default one is 1e-3. For cross-validation you have to use the parameter *--cross-validation--*. There are several options such as None, Normal and Random
 
 ```cmd
 python task_1.4.py --network faster_RCNN --lr 1e-3 --cross-validation=Normal
