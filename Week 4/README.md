@@ -9,6 +9,6 @@ Libraries have been installed from the code repositories following their respect
 
 ## Task 1.3
 
-## Task 2.1
+## Task 2
 
-See the task_2_1.ipynb notebook to generate the video.  The outputted predictions are in /outputs and data_simple (TrackEval format). 
+See the task_2.ipynb notebook to generate the video.  The outputted predictions are in /outputs and data_simple (TrackEval format). See task_2_generate_hotas, task_2_inference_detectron and task_2_train_detectron files to train and detect tracking objects.
