@@ -8,7 +8,7 @@ See the task1.1.py for implementation.
 Libraries have been installed from the code repositories following their respective tutorials. See the task_1_2.ipynb notebook for implementation links to the off-the-shelf methods and a visualisation/library setup demo with the image 000045_10.png.
 
 ## Task 1.3
-See the task1_3.ipynb for implementation. The data folder contains the obtained results in MOT16 challenge format.  
+See the task1_3.ipynb for implementation. The data folder contains the obtained results in TrackEval format.  
 
 ## Task 2
 
