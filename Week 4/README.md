@@ -9,7 +9,7 @@ Libraries have been installed from the code repositories following their respect
 
 ## Task 1.3
 See the task1_3.ipynb for implementation. The TrackEval folder containing the obtained results in MOT16 challenge format has been added. Run the following script to obtain the results
-        python TrackEval/scripts/run_mot_challenge.py --BENCHMARK lucas-kanade-median --DO_PREPROC False 
+                python TrackEval/scripts/run_mot_challenge.py --BENCHMARK lucas-kanade-median --DO_PREPROC False 
 
 ## Task 2
 
