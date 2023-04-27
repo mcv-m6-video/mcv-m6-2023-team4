@@ -9,3 +9,6 @@ This task can be found in the notebook triplet_method_2.ipynb. This approach rel
 
 ## Metrics
 HOTA metrics can be computed by running the trackelval.ipynb notebook.
+
+## Train model on Stanford cars dataset (https://ai.stanford.edu/~jkrause/cars/car_dataset.html)
+To train model on Stanford cars dataset run triplet_cars_stanford.py
