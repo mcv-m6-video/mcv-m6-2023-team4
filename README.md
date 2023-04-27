@@ -6,5 +6,9 @@
 * Abel García Romera
 * Hicham El Muhandiz Aarab
 
+## Project description
+
+
+
 ## Final presentation slides
 https://docs.google.com/presentation/d/1nIyObPnBSzQkoAfdtGu5g_cRmdkPdrvoEXVzozqP84g/edit?usp=sharing
