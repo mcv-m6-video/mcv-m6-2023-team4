@@ -12,5 +12,6 @@ In this project we explore the task of video sequence analysis, more specificall
 
 The dataset used is CVPR 2020 AI City Challenge - Track1. Which can be found on: https://www.aicitychallenge.org/2023-data-and-evaluation/
 
+![](https://github.com/mcv-m6-video/mcv-m6-2023-team4/blob/main/Week%205/data/cars.gif?raw=true)
 ## Final presentation slides
 https://docs.google.com/presentation/d/1nIyObPnBSzQkoAfdtGu5g_cRmdkPdrvoEXVzozqP84g/edit?usp=sharing
