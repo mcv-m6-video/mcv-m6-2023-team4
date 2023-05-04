@@ -17,3 +17,4 @@ The dataset used is CVPR 2020 AI City Challenge - Track1. Which can be found on:
 https://docs.google.com/presentation/d/1nIyObPnBSzQkoAfdtGu5g_cRmdkPdrvoEXVzozqP84g/edit?usp=sharing
 
 ## Final report
+https://www.overleaf.com/read/fnygdrftdjyw
